@@ -5,6 +5,17 @@ orbs:
   serverless-framework: circleci/serverless-framework@2.0
 
 jobs:
+  test:
+    executor: serverless-framework/default
+  
+    steps:
+      - checkout
+      - serverless-framework/setup
+      - run: yarn
+      - run: yarn test:ci
+      - store_test_results:
+          path: junit.xml
+
   deploy:
     executor: serverless-framework/default
 
@@ -21,7 +32,10 @@ jobs:
           command: yarn deploy
 
 workflows:
-  deploy:
+  test-and-deploy:
     jobs:
+      - test
       - deploy:
           context: aws
+          requires: 
+            - test

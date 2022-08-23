@@ -1,0 +1,27 @@
+version: '2.1'
+
+orbs:
+  aws-cli: circleci/aws-cli@3.1
+  serverless-framework: circleci/serverless-framework@2.0
+
+jobs:
+  deploy:
+    executor: serverless-framework/default
+
+    steps:
+      - checkout
+      - aws-cli/setup
+      - serverless-framework/setup
+      - run: yarn
+      - run:
+          name: check function output
+          command: yarn run start:function
+      - run:
+          name: deploy
+          command: yarn deploy
+
+workflows:
+  deploy:
+    jobs:
+      - deploy:
+          context: aws

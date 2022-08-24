@@ -3,6 +3,7 @@ import {
   calcPeriodicInterestRate, 
   resolvePaymentRate
 } from "./interestRate";
+import { validate } from "./validator";
 
 export function calculate(
   propertyPrice: number,
@@ -10,14 +11,10 @@ export function calculate(
   interestRate: number,
   amortization: number,
   paymentSchedule: string
-): number {
+): number | Error[] {
   
-  const minimumDownPayment = calcMinimumDownPayment(propertyPrice);
-  if (downPayment < minimumDownPayment) throw new Error(JSON.stringify({
-    message: "The down payment received is below the minimum required.",
-    information: `For the property price of \$${propertyPrice}, the down payment must be equal or above \$${minimumDownPayment}`,
-    code: 400
-  }));
+  const errors = validate(propertyPrice, downPayment, interestRate, amortization, paymentSchedule);
+  if (errors.length > 0) return errors;
   
   const compoundingFrequency = 2;
   const principalLoanAmount = propertyPrice - downPayment;

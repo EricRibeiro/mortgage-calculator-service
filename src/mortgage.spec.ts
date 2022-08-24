@@ -1,33 +1,19 @@
-import { 
-  calculate, 
-  calcMinimumDownPayment, 
-} from "./mortgage";
+import { calculate, calcMinimumDownPayment } from "./mortgage";
+import { TestParameters } from "./types";
 
 // The following calculators are used for validation: 
 // https://itools-ioutils.fcac-acfc.gc.ca/MC-CH/MCCalc-CHCalc-eng.aspx
 // https://www.mortgagecalculator.org/calcs/canadian.php
 
+const defaultValues: TestParameters = {
+  propertyPrice: 600000,
+  downPayment: 200000,
+  nominalInterestRate: 4,
+  amortization: 25,
+  paymentSchedule: "monthly" 
+}
+
 describe("Tests if the minimum down payment is calculated correctly", () => {
-  it("should throw error if down payment is below minimum required", () => {
-    const propertyPrice = 600000;
-    const downPayment = 10000;
-    const nominalInterestRate = 4;
-    const amortization = 25;
-    const paymentSchedule = 'monthly';
-    
-    const calcWithInvalidMinimumDownPayment = () => {
-      calculate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);
-    }
-
-    const expectedError = new Error(JSON.stringify({
-      message: "The down payment received is below the minimum required.",
-      information: "For the property price of $600000, the down payment must be equal or above $35000",
-      code: 400
-    }));
-
-    expect(calcWithInvalidMinimumDownPayment).toThrowError(expectedError);
-  });
-
   it("should calculate the minimum down payment for property price equal or below $500,000", () => {
     const propertyPrice = 400000;
     const minimumDownPayment = calcMinimumDownPayment(propertyPrice);
@@ -52,11 +38,7 @@ describe("Tests if the minimum down payment is calculated correctly", () => {
 
 describe("Tests if the payment per payment schedule is calculated correctly", () => {
   it("should calculate payments over a monthly schedule", () => {
-    const propertyPrice = 600000;
-    const downPayment = 200000;
-    const nominalInterestRate = 4;
-    const amortization = 25;
-    const paymentSchedule = 'monthly';
+    const { propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule} = defaultValues;
 
     const payment = calculate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);
 
@@ -64,10 +46,7 @@ describe("Tests if the payment per payment schedule is calculated correctly", ()
   });
 
   it("should calculate payments over a bi-weekly schedule", () => {
-    const propertyPrice = 600000;
-    const downPayment = 200000;
-    const nominalInterestRate = 4;
-    const amortization = 25;
+    const { propertyPrice, downPayment, nominalInterestRate, amortization } = defaultValues;
     const paymentSchedule = 'bi-weekly';
 
     const payment = calculate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);
@@ -76,10 +55,7 @@ describe("Tests if the payment per payment schedule is calculated correctly", ()
   });
 
   it("should calculate payments over an accelerated bi-weekly schedule", () => {
-    const propertyPrice = 600000;
-    const downPayment = 200000;
-    const nominalInterestRate = 4;
-    const amortization = 25;
+    const { propertyPrice, downPayment, nominalInterestRate, amortization } = defaultValues;
     const paymentSchedule = 'accelerated-bi-weekly';
 
     const payment = calculate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);

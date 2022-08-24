@@ -12,8 +12,11 @@ functions:
     handler: handler.main
     events:
       - httpApi:
-          path: /
+          path: /mortgage
           method: get
+      - httpApi:
+          path: /mortgage
+          method: post
 
 plugins:
   - serverless-plugin-typescript

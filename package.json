@@ -5,13 +5,14 @@
   "license": "Apache-2.0",
   "scripts": {
     "start": "serverless offline start",
-    "start:function": "serverless invoke local --function handler",
     "test": "jest",
     "test:ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
     "test:coverage": "jest --coverage",
     "deploy": "serverless deploy",
     "deploy:function": "serverless deploy function --function handler",
-    "remove": "serverless remove"
+    "remove": "serverless remove",
+    "invoke:success": "serverless invoke local --function handler --path mocks/success_event_mock.json",
+    "invoke:error": "serverless invoke local --function handler --path mocks/error_event_mock.json"
   },
   "dependencies": {},
   "devDependencies": {

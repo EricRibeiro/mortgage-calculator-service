@@ -103,7 +103,7 @@ function validateAmortization(amortization: number): Error[] {
 
 function validatePaymentSchedule(paymentSchedule: string): Error[] {
   const schedules = ['accelerated-bi-weekly', 'bi-weekly', 'monthly'];
-  const isValid = paymentSchedule || typeof paymentSchedule === "string";
+  const isValid = paymentSchedule && typeof paymentSchedule === "string";
   const errors: Error[] = [];
 
   if (!isValid) {

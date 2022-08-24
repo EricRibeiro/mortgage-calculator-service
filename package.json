@@ -7,7 +7,8 @@
     "start": "serverless offline start",
     "start:function": "serverless invoke local --function handler",
     "test": "jest",
-    "test:ci": "jest --ci --reporters=default --reporters=jest-junit",
+    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
+    "test:coverage": "jest --coverage",
     "deploy": "serverless deploy",
     "deploy:function": "serverless deploy function --function handler",
     "remove": "serverless remove"

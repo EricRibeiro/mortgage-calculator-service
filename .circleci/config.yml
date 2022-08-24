@@ -12,6 +12,12 @@ jobs:
       - checkout
       - serverless-framework/setup
       - run: yarn
+      - run: 
+          name: Invoke handler with valid data
+          command: yarn invoke:success
+      - run: 
+          name: Invoke handler with invalid data
+          command: yarn invoke:error
       - run: yarn test:ci
       - store_test_results:
           path: junit.xml

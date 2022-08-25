@@ -2,20 +2,15 @@ import { Handler } from 'aws-lambda';
 import { calculate } from './src/mortgage';
 
 export const main: Handler = (event: any) => {
-  let response: { statusCode: number; body: string; };
+  let response: { statusCode: number; body: any; };
 
   if (event.requestContext.http.method === 'POST') {
     const { propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule } = JSON.parse(event.body);
     const mortgage = calculate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);
     
-    const message = (typeof mortgage === 'number')
-      ? mortgage as number
-      : (mortgage as Error[]).map(error => JSON.parse(error.message));
-
-    response = {
-      statusCode: (typeof mortgage === 'number') ? 200 : 400,
-      body: JSON.stringify(message),
-    };
+    response = (typeof mortgage === 'number')
+      ? { statusCode: 200, body: JSON.stringify(mortgage) }
+      : { statusCode: 400, body: JSON.stringify(mortgage.map(error => JSON.parse(error.message)))}
 
   } else if (event.requestContext.http.method === 'GET') {
     response = {

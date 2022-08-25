@@ -14,11 +14,11 @@ describe("Tests if an error is returned when the parameter is null, undefined, N
 
   const testData = parameters.reduce((acc, curr) => { 
     return acc.concat([
-      {parameter: `${curr}`, value: 0, expected: `The ${curr} must be a number greater than 0 but 0 was received instead.`},
-      {parameter: `${curr}`, value: -1, expected: `The ${curr} must be a number greater than 0 but -1 was received instead.`},
-      {parameter: `${curr}`, value: null, expected: `The ${curr} must be a number greater than 0 but null was received instead.`},
-      {parameter: `${curr}`, value: undefined, expected: `The ${curr} must be a number greater than 0 but undefined was received instead.`},
-      {parameter: `${curr}`, value: "potato", expected: `The ${curr} must be a number greater than 0 but potato was received instead.`},
+      {parameter: `${curr}`, value: 0, expected: `The ${curr} must be a number greater than 0 but "0" was received instead.`},
+      {parameter: `${curr}`, value: -1, expected: `The ${curr} must be a number greater than 0 but "-1" was received instead.`},
+      {parameter: `${curr}`, value: null, expected: `The ${curr} must be a number greater than 0 but "null" was received instead.`},
+      {parameter: `${curr}`, value: undefined, expected: `The ${curr} must be a number greater than 0 but "undefined" was received instead.`},
+      {parameter: `${curr}`, value: "potato", expected: `The ${curr} must be a number greater than 0 but "potato" was received instead.`},
     ]);
   }, new Array<any>());
 
@@ -47,6 +47,6 @@ describe("Tests if the down payment parameter is validated correctly", () => {
     expect(errors.length).toBe(1);
 
     const errorInfo = JSON.parse(errors[0].message).information;
-    expect(errorInfo).toBe(`For the property price of ${propertyPrice}, the down payment must be equal or above 35000. The value received was ${downPayment}.`);
+    expect(errorInfo).toBe(`With a property price of "${propertyPrice}", the down payment must be at least 35000. "${downPayment}" was received instead.`);
   });
 });

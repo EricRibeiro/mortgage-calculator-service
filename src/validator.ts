@@ -18,31 +18,13 @@ export function validate(
   if (amortizationErrors.length > 0) errors.push(...amortizationErrors);
   if (paymentScheduleErrors.length > 0) errors.push(...paymentScheduleErrors);
 
-  if (!propertyPrice || !isNumberAndGreaterThanZero(propertyPrice)) {
-    const propertyPriceError = new Error(JSON.stringify({
-      message: "The propertyPrice is invalid.",
-      information: `The propertyPrice must be a number greater than 0 but ${propertyPrice} was received instead.`,
-      code: 400
-    }));
-
-    errors.push(propertyPriceError);
-  }
+  if (!propertyPrice || !isNumberAndGreaterThanZero(propertyPrice))
+    errors.push(getNumericalError("propertyPrice", propertyPrice));
   
-  if (!nominalInterestRate || !isNumberAndGreaterThanZero(nominalInterestRate)) {
-    const interestRateError = new Error(JSON.stringify({
-      message: "The nominalInterestRate is invalid.",
-      information: `The nominalInterestRate must be a number greater than 0 but ${nominalInterestRate} was received instead.`,
-      code: 400
-    }));
-
-    errors.push(interestRateError);
-  }
+  if (!nominalInterestRate || !isNumberAndGreaterThanZero(nominalInterestRate))
+    errors.push(getNumericalError("nominalInterestRate", nominalInterestRate));
     
   return errors;
-}
-
-function isNumberAndGreaterThanZero(number: number): boolean {
-  return !Number.isNaN(number) && number > 0;
 }
 
 function validateDownPayment(downPayment: number, propertyPrice: number): Error[] {
@@ -50,22 +32,13 @@ function validateDownPayment(downPayment: number, propertyPrice: number): Error[
   const isValid = downPayment && isNumberAndGreaterThanZero(downPayment);
   const errors: Error[] = [];
 
-  if (!isValid) {
-    const invalidNumberError = new Error(JSON.stringify({
-      message: "The downPayment received is invalid.",
-      information: `The downPayment must be a number greater than 0 but ${downPayment} was received instead.`,
-      code: 400
-    }));
-
-    errors.push(invalidNumberError);
-  }
+  if (!isValid) errors.push(getNumericalError("downPayment", downPayment));
 
   if (isValid && downPayment < minimumDownPayment) {
-    const minimumDownPaymentError = new Error(JSON.stringify({
-      message: "The downPayment received is below the minimum required.",
-      information: `For the property price of ${propertyPrice}, the down payment must be equal or above ${minimumDownPayment}. The value received was ${downPayment}.`,
-      code: 400
-    }));
+    const minimumDownPaymentError = getError(
+      "The downPayment is below the minimum required.",
+      `With a property price of "${propertyPrice}", the down payment must be at least ${minimumDownPayment}. "${downPayment}" was received instead.`
+    )
 
     errors.push(minimumDownPaymentError);
   }
@@ -78,22 +51,13 @@ function validateAmortization(amortization: number): Error[] {
   const isValid = amortization && isNumberAndGreaterThanZero(amortization);
   const errors: Error[] = [];
 
-  if (!isValid) {
-    const invalidNumberError = new Error(JSON.stringify({
-      message: "The amortization received is invalid.",
-      information: `The amortization must be a number greater than 0 but ${amortization} was received instead.`,
-      code: 400
-    }));
-
-    errors.push(invalidNumberError);
-  }
+  if (!isValid) errors.push(getNumericalError("amortization", amortization));
 
   if (isValid && !amortizations.includes(amortization)) {
-    const invalidAmortizationError = new Error(JSON.stringify({
-      message: "The amortization received is invalid.",
-      information: `The amortization value must be one of the following: ${amortizations.join(", ")}`,
-      code: 400
-    }));
+    const invalidAmortizationError = getError(
+      "The amortization is invalid.",
+      `The amortization value must be one of the following: ${amortizations.join(", ")} but "${amortization}" was received instead.`
+    )
 
     errors.push(invalidAmortizationError);
   }
@@ -107,24 +71,39 @@ function validatePaymentSchedule(paymentSchedule: string): Error[] {
   const errors: Error[] = [];
 
   if (!isValid) {
-    const invalidFormatError = new Error(JSON.stringify({
-      message: "The payment schedule received is invalid.",
-      information: `The payment schedule must be a non-null string but ${paymentSchedule} was received instead.`,
-      code: 400
-    }));
+    const invalidFormatError = getError(
+      "The payment schedule is invalid.",
+      `The payment schedule must be a non-null string but "${paymentSchedule}" was received instead.`
+    )
 
     errors.push(invalidFormatError);
   }
 
   if (isValid && !schedules.includes(paymentSchedule)) {
-    const invalidAmortizationError = new Error(JSON.stringify({
-      message: "The payment schedule received is invalid.",
-      information: `The payment schedule value must be one of the following: ${schedules.join(", ")}`,
-      code: 400
-    }));
+    const invalidAmortizationError = getError(
+      "The payment schedule is invalid.", 
+      `The payment schedule value must be one of the following: ${schedules.join(", ")}`
+    );
 
     errors.push(invalidAmortizationError);
   }
   
   return errors;
+}
+
+function getNumericalError(propName: string, value: number): Error {
+  const message = `The ${propName} is invalid.`;
+  const information = `The ${propName} must be a number greater than 0 but "${value}" was received instead.`;
+  return getError(message, information)
+}
+
+function getError(message: string, information: string): Error {
+  return new Error(JSON.stringify({
+    message,
+    information
+  }));
+}
+
+function isNumberAndGreaterThanZero(number: number): boolean {
+  return !Number.isNaN(number) && number > 0;
 }

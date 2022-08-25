@@ -51,7 +51,7 @@ describe("Tests if the payment per payment schedule is calculated correctly", ()
 
     const payment = calculate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);
 
-    expect(payment).toBe(970.25);
+    expect(payment).toBe(971.11);
   });
 
   it("should calculate payments over an accelerated bi-weekly schedule", () => {

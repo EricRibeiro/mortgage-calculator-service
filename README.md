@@ -78,18 +78,18 @@ You will see:
   "statusCode": 400,
   "body": [
     {
-      "message": "The amortization received is invalid.",
-      "information": "The amortization must be a number greater than 0 but undefined was received instead.",
+      "message": "The amortization is invalid.",
+      "information": "The amortization must be a number greater than 0 but \"undefined\" was received instead.",
       "code": 400
     },
     {
-      "message": "The payment schedule received is invalid.",
-      "information": "The payment schedule must be a non-null string but undefined was received instead.",
+      "message": "The payment schedule is invalid.",
+      "information": "The payment schedule must be a non-null string but \"undefined\" was received instead.",
       "code": 400
     },
     {
       "message": "The nominalInterestRate is invalid.",
-      "information": "The nominalInterestRate must be a number greater than 0 but undefined was received instead.",
+      "information": "The nominalInterestRate must be a number greater than 0 but \"undefined\" was received instead.",
       "code": 400
     }
   ]

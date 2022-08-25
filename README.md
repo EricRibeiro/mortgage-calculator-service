@@ -184,12 +184,12 @@ Using `fetch`:
 ```javascript
 fetch('http://localhost:3000/mortgage', {
   method: 'POST',
-      body: JSON.stringify({
-      propertyPrice: 600000,
-      downPayment: 200000,
-      nominalInterestRate: 4,
-      amortization: 25,
-      paymentSchedule: "monthly" 
+  body: JSON.stringify({
+    propertyPrice: 600000,
+    downPayment: 200000,
+    nominalInterestRate: 4,
+    amortization: 25,
+    paymentSchedule: "monthly" 
   }),
   headers: {
     'Content-type': 'application/json; charset=UTF-8'

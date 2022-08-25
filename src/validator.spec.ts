@@ -38,9 +38,9 @@ describe("Tests if an error is returned when the parameter is null, undefined, N
   });
 });
 
-describe("Tests if the down payment parameter is validated correctly", () => {
+describe("Tests if the down payment is validated correctly", () => {
   it("should return error if down payment is below the minimum", () => {
-    const { propertyPrice, nominalInterestRate, amortization, paymentSchedule} = defaultValues;
+    const { propertyPrice, nominalInterestRate, amortization, paymentSchedule } = defaultValues;
     const downPayment = 500;
 
     const errors = validate(propertyPrice, downPayment as any, nominalInterestRate, amortization, paymentSchedule);
@@ -48,5 +48,31 @@ describe("Tests if the down payment parameter is validated correctly", () => {
 
     const errorInfo = JSON.parse(errors[0].message).information;
     expect(errorInfo).toBe(`With a property price of "${propertyPrice}", the down payment must be at least 35000. "${downPayment}" was received instead.`);
+  });
+});
+
+describe("Tests if the payment schedule is validated correctly", () => {
+  it("should return error if payment schedule is invalid", () => {
+    const { propertyPrice, downPayment, nominalInterestRate, amortization } = defaultValues;
+    const paymentSchedule = "weekly";
+
+    const errors = validate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);
+    expect(errors.length).toBe(1);
+
+    const errorInfo = JSON.parse(errors[0].message).information;
+    expect(errorInfo).toBe("The paymentSchedule must be one of the following: accelerated-bi-weekly, bi-weekly, monthly. \"weekly\" was received instead.");
+  });
+});
+
+describe("Tests if the amortization is validated correctly", () => {
+  it("should return error if amortization is outside range", () => {
+    const { propertyPrice, downPayment, nominalInterestRate, paymentSchedule } = defaultValues;
+    const amortization = 35;
+
+    const errors = validate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);
+    expect(errors.length).toBe(1);
+
+    const errorInfo = JSON.parse(errors[0].message).information;
+    expect(errorInfo).toBe("The amortization must be one of the following: 5, 10, 15, 20, 25, 30 but \"35\" was received instead.");
   });
 });

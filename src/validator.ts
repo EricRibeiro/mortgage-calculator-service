@@ -56,7 +56,7 @@ function validateAmortization(amortization: number): Error[] {
   if (isValid && !amortizations.includes(amortization)) {
     const invalidAmortizationError = getError(
       "The amortization is invalid.",
-      `The amortization value must be one of the following: ${amortizations.join(", ")} but "${amortization}" was received instead.`
+      `The amortization must be one of the following: ${amortizations.join(", ")} but "${amortization}" was received instead.`
     )
 
     errors.push(invalidAmortizationError);
@@ -72,8 +72,8 @@ function validatePaymentSchedule(paymentSchedule: string): Error[] {
 
   if (!isValid) {
     const invalidFormatError = getError(
-      "The payment schedule is invalid.",
-      `The payment schedule must be a non-null string but "${paymentSchedule}" was received instead.`
+      "The paymentSchedule is invalid.",
+      `The paymentSchedule must be a non-null string but "${paymentSchedule}" was received instead.`
     )
 
     errors.push(invalidFormatError);
@@ -81,8 +81,8 @@ function validatePaymentSchedule(paymentSchedule: string): Error[] {
 
   if (isValid && !schedules.includes(paymentSchedule)) {
     const invalidAmortizationError = getError(
-      "The payment schedule is invalid.", 
-      `The payment schedule value must be one of the following: ${schedules.join(", ")}`
+      "The paymentSchedule is invalid.", 
+      `The paymentSchedule must be one of the following: ${schedules.join(", ")}. "${paymentSchedule}" was received instead.`
     );
 
     errors.push(invalidAmortizationError);

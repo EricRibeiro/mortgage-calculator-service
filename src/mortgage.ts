@@ -50,9 +50,9 @@ export function calcMinimumDownPayment(propertyPrice: number): number {
   // 5% of the first $500,000 of the purchase price
   // 10% for the portion of the purchase price above $500,000
   else if (propertyPrice > 500000 && propertyPrice <= 999999) 
-    return  25000 + ((propertyPrice - 500000) * 0.1);
+    return 25000 + ((propertyPrice - 500000) * 0.1);
 
   // 20% of the purchase price
   else 
-    return  propertyPrice * 0.2;
+    return propertyPrice * 0.2;
 }

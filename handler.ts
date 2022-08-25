@@ -5,7 +5,8 @@ export const main: Handler = (event: any) => {
   let response: { statusCode: number; body: any; };
 
   if (event.requestContext.http.method === 'POST') {
-    const { propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule } = JSON.parse(event.body);
+    const payload = event.body ? JSON.parse(event.body) : {};
+    const { propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule } = payload;
     const mortgage = calculate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);
     
     response = (typeof mortgage === 'number')

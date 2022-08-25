@@ -11,8 +11,8 @@
     "deploy": "serverless deploy",
     "deploy:function": "serverless deploy function --function handler",
     "remove": "serverless remove",
-    "invoke:success": "serverless invoke local --function handler --path mocks/success_event_mock.json",
-    "invoke:error": "serverless invoke local --function handler --path mocks/error_event_mock.json"
+    "invoke:success": "serverless invoke local --function handler --path mocks/success_event.json",
+    "invoke:error": "serverless invoke local --function handler --path mocks/error_event.json"
   },
   "dependencies": {},
   "devDependencies": {

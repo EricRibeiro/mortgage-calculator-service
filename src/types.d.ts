@@ -1,4 +1,4 @@
-export interface TestParameters {
+export interface Parameters {
   propertyPrice: number;
   downPayment: number;
   nominalInterestRate: number;

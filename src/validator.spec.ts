@@ -1,7 +1,7 @@
-import { TestParameters } from "./types";
+import { Parameters } from "./types";
 import { validate } from "./validator";
 
-const defaultValues: TestParameters = {
+const defaultValues: Parameters = {
   propertyPrice: 600000,
   downPayment: 200000,
   nominalInterestRate: 4,
@@ -23,10 +23,12 @@ describe("Tests if an error is returned when the parameter is null, undefined, N
   }, new Array<any>());
 
   test.each(testData)('should return error if $parameter is set to $value', ({parameter, value, expected}) => {
-    const testParameters = Object.entries(defaultValues).reduce((acc, [key, val]) => {
-      acc[key] = (key === parameter) ? value : val;
-      return acc;
-    }, {} as TestParameters);
+    const testParameters = Object
+      .entries(defaultValues)
+      .reduce((acc, [key, val]) => {
+        acc[key] = (key === parameter) ? value : val;
+        return acc;
+      }, {} as Parameters);
 
     const { propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule} = testParameters;
 

@@ -1,5 +1,4 @@
-import { calcEffectiveRate, calcMonthlyRate } from "./interestRate";
-import { validate } from "./validator";
+import { calcEffectiveRate, calcPeriodicRate } from "./interestRate";
 
 export function calculate(
   propertyPrice: number,
@@ -7,37 +6,32 @@ export function calculate(
   interestRate: number,
   amortization: number,
   paymentSchedule: string
-): number | Error[] {
-  
-  const errors = validate(propertyPrice, downPayment, interestRate, amortization, paymentSchedule);
-  if (errors.length > 0) return errors;
-  
+): number | Error[] {  
   const compoundingFrequency = 2;
   const principal = propertyPrice - downPayment;
+  const numberPaymentsInYear = resolveNumberPaymentsInYear(paymentSchedule);
+  const totalNumberPayments = amortization * numberPaymentsInYear;
 
   const effectiveRate = calcEffectiveRate(interestRate, compoundingFrequency);
-  const monthlyRate = calcMonthlyRate(effectiveRate);
-  const monthlyPayment = calcMonthlyPayment(monthlyRate, principal, amortization)
-  const paymentPerSchedule = calcPaymentPerSchedule(paymentSchedule, monthlyPayment);
+  const periodicRate = calcPeriodicRate(effectiveRate, numberPaymentsInYear);
+  const paymentPerSchedule = calcPeriodicPayment(periodicRate, principal, totalNumberPayments)
   
   const paymentPerScheduleFormatted = Number.parseFloat(paymentPerSchedule.toFixed(2));
   return paymentPerScheduleFormatted;
 }
 
-function calcMonthlyPayment(monthlyRate: number, principalLoanAmount: number, amortization: number): number {
-    // Formula from: https://www.bankrate.com/mortgages/mortgage-calculator/#how-mortgage-calculator-help
-    const amortizationInMonths = amortization * 12;
-    const numerator = monthlyRate * principalLoanAmount
-    const denominator = 1 - Math.pow(1 + monthlyRate, -amortizationInMonths);
-    const monthlyPayment = numerator / denominator;
-    return monthlyPayment;
+function calcPeriodicPayment(periodicRate: number, principal: number, numberPayments: number): number {
+  // Formula from: https://www.bankrate.com/mortgages/mortgage-calculator/#how-mortgage-calculator-help
+  const numerator = periodicRate * Math.pow(1 + periodicRate, numberPayments);
+  const denominator = Math.pow(1 + periodicRate, numberPayments) - 1;
+  const periodicPayments = principal * (numerator / denominator);
+  return periodicPayments;
 }
 
-function calcPaymentPerSchedule(paymentSchedule: string, monthlyPayment: number): number {
-  // Annualize the payments and divide it by the number of payments per year
-  if (paymentSchedule === "bi-weekly") return (monthlyPayment * 12) / 26;
-  if (paymentSchedule === "monthly") return monthlyPayment;
-  if (paymentSchedule === "accelerated-bi-weekly") return monthlyPayment / 2;
+function resolveNumberPaymentsInYear(paymentSchedule: string): number {
+  if (paymentSchedule === "bi-weekly") return 26;
+  if (paymentSchedule === "monthly") return 12;
+  if (paymentSchedule === "accelerated-bi-weekly") return 24;
   throw new Error("Invalid payment schedule");
 } 
 

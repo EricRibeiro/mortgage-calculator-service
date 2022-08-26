@@ -1,18 +1,19 @@
 import { Handler } from 'aws-lambda';
 import { calculate } from './src/mortgage';
-
+import { validate } from './src/validator';
+import { Parameters } from "./src/types";
 export const main: Handler = (event: any) => {
   let response: { statusCode: number; body: any; };
 
   if (event.requestContext.http.method === 'POST') {
-    const payload = event.body ? JSON.parse(event.body) : {};
+    const payload: Parameters = event.body ? JSON.parse(event.body) : {};
     const { propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule } = payload;
-    const mortgage = calculate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);
+    const errors = validate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule);
     
-    response = (typeof mortgage === 'number')
-      ? { statusCode: 200, body: JSON.stringify(mortgage) }
-      : { statusCode: 400, body: JSON.stringify(mortgage.map(error => JSON.parse(error.message)))}
-
+    response = (errors.length > 0)
+      ? { statusCode: 400, body: JSON.stringify(errors.map(error => JSON.parse(error.message))) }
+      : { statusCode: 200, body: JSON.stringify(calculate(propertyPrice, downPayment, nominalInterestRate, amortization, paymentSchedule)) }
+    
   } else if (event.requestContext.http.method === 'GET') {
     response = {
       statusCode: 200,

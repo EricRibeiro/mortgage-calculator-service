@@ -2,14 +2,14 @@ export function calcEffectiveRate(nominalInterestRate: number, compoundingFreque
   // Formula from: https://www.mikesukmanowsky.com/blog/a-guide-to-canadian-mortgage-calculations
   const base = 1 + ((nominalInterestRate / 100) / compoundingFrequency);
   const exponent = compoundingFrequency;
-  const effectiveInterestRate = Math.pow(base, exponent) - 1;
-  return effectiveInterestRate;
+  const effectiveRate = Math.pow(base, exponent) - 1;
+  return effectiveRate;
 }
 
-export function calcMonthlyRate(effectiveInterestRate: number): number {
+export function calcPeriodicRate(effectiveRate: number, numberPaymentsInYear: number): number {
   // Formula from: https://www.mikesukmanowsky.com/blog/a-guide-to-canadian-mortgage-calculations
-  const base = 1 + effectiveInterestRate;
-  const exponent = 1/12;
-  const monthlyInterestRate = Math.pow(base, exponent) - 1;
-  return monthlyInterestRate;
+  const base = 1 + effectiveRate;
+  const exponent = 1 / numberPaymentsInYear;
+  const periodicRate = Math.pow(base, exponent) - 1;
+  return periodicRate;
 }

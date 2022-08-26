@@ -1,11 +1,11 @@
-import { calcEffectiveRate, calcMonthlyRate } from "./interestRate";
+import { calcEffectiveRate, calcPeriodicRate } from "./interestRate";
 
 describe("Tests if the effective interest rate is calculated correctly", () => {
   it("should calculate the effective rate based on the nominal rate and compounding frequency", () => {
     const nominalInterestRate = 2.34;
     const compoundingFrequency = 2;
+    
     const effectiveRate = calcEffectiveRate(nominalInterestRate, compoundingFrequency);
-
     expect(effectiveRate).toBe(0.023536890000000144);
   });
 });
@@ -16,8 +16,7 @@ describe("Tests if the periodic interest rate is calculated correctly", () => {
     const compoundingFrequency = 2;
 
     const effectiveRate = calcEffectiveRate(nominalInterestRate, compoundingFrequency);
-    const periodicRate = calcMonthlyRate(effectiveRate);
-
+    const periodicRate = calcPeriodicRate(effectiveRate, 12);
     expect(periodicRate).toBe(0.0019405611613942941);
   });
 });

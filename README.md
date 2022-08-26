@@ -14,10 +14,12 @@ I don't know, but I had to use a lot of it. I found out throughout this exercise
 
 Since calculating the interest rate is a hurdle, I broke down the code into [interest rate](src/interestRate.ts) and [mortgage](src/mortgage.ts)-specific files. They contain all functions necessary to perform their respective responsibilities. I linked the sources of all formulas throughout the source code.
 
-I'm writing tests and validating my outputs with the following calculators:
+I'm writing tests and validating my outputs with the following calculators. Notice, however, that your mileage may vary because of rounding errors:
 
  - https://itools-ioutils.fcac-acfc.gc.ca/MC-CH/MCCalc-CHCalc-eng.aspx
  - https://www.mortgagecalculator.org/calcs/canadian.php
+
+
 
 ## Running the service
 

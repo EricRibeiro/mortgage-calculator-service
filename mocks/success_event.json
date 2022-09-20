@@ -33,7 +33,7 @@
     "domainName": "offlineContext_domainName",
     "domainPrefix": "offlineContext_domainPrefix",
     "http": {
-      "method": "POST",
+      "method": "GET",
       "path": "/mortgage",
       "protocol": "HTTP/1.1",
       "sourceIp": "127.0.0.1",
